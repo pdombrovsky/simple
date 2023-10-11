@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Expression;
 
+
 use Expression\Conditions\Comparators\Enums\ComparatorsEnum;
 
 use Expression\Contracts\ExpressionableInterface;
 use Expression\Operands\Contracts\OperandInterface;
-use Expression\Operands\Contracts\OperandProviderInterface;
 
+use Expression\Attribute;
 use Expression\Conditions\Between;
 use Expression\Conditions\In;
 use Expression\Conditions\Comparators\Comparator;
@@ -26,21 +27,21 @@ class Condition
     }
 
     /**
-     * @param OperandProviderInterface $operandProviderInterface
+     * @param Attribute $attribute
      * @return static
      */
-    public static function operand(OperandProviderInterface $operandProviderInterface): static
+    public static function operand(Attribute $attribute): static
     {
-        return new static($operandProviderInterface->getOperand());
+        return new static($attribute->getOperand());
     }
 
     /**
-     * @param OperandProviderInterface $operandProviderInterface
+     * @param Attribute $attribute
      * @return static
      */
-    public static function size(OperandProviderInterface $operandProviderInterface): static
+    public static function size(Attribute $attribute): static
     {
-        return new static(new Size($operandProviderInterface->getOperand()));
+        return new static(new Size($attribute->getOperand()));
     }
 
     /**

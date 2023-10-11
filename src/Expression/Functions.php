@@ -6,8 +6,7 @@ namespace Expression;
 
 use Expression\Conditions\Functions\Enums\AttributeTypesEnum;
 
-use Expression\Operands\Contracts\OperandProviderInterface;
-
+use Expression\Attribute;
 use Expression\Conditions\Functions\AttributeExists;
 use Expression\Conditions\Functions\AttributeNotExists;
 use Expression\Conditions\Functions\AttributeType;
@@ -18,50 +17,50 @@ use Expression\Operands\Value;
 class Functions
 {
     /**
-     * @param OperandProviderInterface $operandInterface
+     * @param Attribute $attribute
      * @return AttributeExists
      */
-    public static function attributeExists(OperandProviderInterface $operandInterface): AttributeExists
+    public static function attributeExists(Attribute $attribute): AttributeExists
     {
-        return new AttributeExists($operandInterface->getOperand());
+        return new AttributeExists($attribute->getOperand());
     }
 
     /**
-     * @param OperandProviderInterface $operandInterface
+     * @param Attribute $attribute
      * @return AttributeNotExists
      */
-    public static function attributeNotExists(OperandProviderInterface $operandInterface): AttributeNotExists
+    public static function attributeNotExists(Attribute $attribute): AttributeNotExists
     {
-        return new AttributeNotExists($operandInterface->getOperand());
+        return new AttributeNotExists($attribute->getOperand());
     }
 
     /**
-     * @param OperandProviderInterface $operandInterface
-     * @param AttributeTypesEnum       $type
+     * @param Attribute          $attribute
+     * @param AttributeTypesEnum $type
      * @return AttributeType
      */
-    public static function attributeType(OperandProviderInterface $operandInterface, AttributeTypesEnum $type): AttributeType
+    public static function attributeType(Attribute $attribute, AttributeTypesEnum $type): AttributeType
     {
-        return new AttributeType($operandInterface->getOperand(), new Value($type->value));
+        return new AttributeType($attribute->getOperand(), new Value($type->value));
     }
 
     /**
-     * @param OperandProviderInterface $operandInterface
-     * @param string                   $substr
+     * @param Attribute $attribute
+     * @param string    $substr
      * @return BeginsWith
      */
-    public static function beginsWith(OperandProviderInterface $operandInterface, string $substr): BeginsWith
+    public static function beginsWith(Attribute $attribute, string $substr): BeginsWith
     {
-        return new BeginsWith($operandInterface->getOperand(), new Value($substr));
+        return new BeginsWith($attribute->getOperand(), new Value($substr));
     }
 
     /**
-     * @param OperandProviderInterface $operandInterface
-     * @param string|int|float         $value
+     * @param Attribute        $attribute
+     * @param string|int|float $value
      * @return Contains
      */
-    public static function contains(OperandProviderInterface $operandInterface, float|int|string|array $value): Contains
+    public static function contains(Attribute $attribute, float|int|string|array $value): Contains
     {
-        return new Contains($operandInterface->getOperand(), new Value($value));
+        return new Contains($attribute->getOperand(), new Value($value));
     }
 }
