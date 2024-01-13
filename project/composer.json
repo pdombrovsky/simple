@@ -1,0 +1,8 @@
+{
+    "autoload": {
+        "psr-4": { "DynamoDbRequests\\": "src/" }
+    },
+    "require": {
+        "php": "~8.2.0"
+    }
+}

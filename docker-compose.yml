@@ -27,7 +27,7 @@ services:
     build:
       context: machine/php
       args:
-        - IMAGE_TAG_VERSION=8.1
+        - IMAGE_TAG_VERSION=8.2
     depends_on:
      - "dynamodb-local"
     links:

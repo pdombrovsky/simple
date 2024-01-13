@@ -1,3 +1,11 @@
 dynamoDb/
 logs/
 .vscode/
+project/public/
+project/*.php
+project/*.txt
+project/composer.lock
+project/vendor/
+
+
+
