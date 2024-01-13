@@ -1,0 +1,65 @@
+version: '3.1'
+
+services:
+  server:
+    container_name: nginx-simple
+    image: nginx
+    build:
+      context: machine/nginx
+      args:
+        - IMAGE_TAG_VERSION=1.23.2
+    environment:
+      # Domain name must be added to hosts 
+      - SIMPLE_HOST=simple.loc
+    volumes:
+      - ./project:/var/www/simple
+      - ./machine/nginx/templates:/etc/nginx/templates
+      - ./machine/nginx/config/php.conf:/etc/nginx/php.conf
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - simple
+    ports:
+      - "80:80"
+  simple:
+    container_name: php-light
+    image: php-light
+    restart: always
+    build:
+      context: machine/php
+      args:
+        - IMAGE_TAG_VERSION=8.1
+    depends_on:
+     - "dynamodb-local"
+    links:
+     - "dynamodb-local"
+    environment:
+      AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
+      AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
+      REGION: 'eu-west-1'
+    volumes:
+      - ./project:/var/www/simple
+      - ./machine/php/configs:/usr/local/etc
+      - ./logs/php:/var/log
+  dynamodb-local:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./dynamoDb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+  aws-cli:
+    depends_on:
+      - dynamodb-local
+    image: amazon/aws-cli
+    container_name: aws-cli
+    #stdin_open: true # equivalent of -i
+    #tty: true        # equivalent of -t
+    ports:
+      - "8080:8080"
+    environment:
+      AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
+      AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
+    command: dynamodb describe-table --table-name Songs --endpoint-url http://dynamodb-local:8000 --region us-west-1
+    
